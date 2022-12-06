@@ -41,6 +41,10 @@ let joinStream = async () => {
     .getElementById("streams__container")
     .insertAdjacentHTML("beforeend", player);
 
+  document
+    .getElementById(`user-container-${uid}`)
+    .addEventListener("click", expandVideoFrame);
+
   localTracks[1].play(`user-${uid}`);
   await client.publish([localTracks[0], localTracks[1]]);
 };
@@ -57,6 +61,15 @@ let handleUserPublished = async (user, mediaType) => {
     document
       .getElementById("streams__container")
       .insertAdjacentHTML("beforeend", player);
+
+    document
+      .getElementById(`user-container-${user.uid}`)
+      .addEventListener("click", expandVideoFrame);
+  }
+
+  if (displayFrame.style.display) {
+    player.style.height = "100px";
+    player.style.width = "100px";
   }
 
   if (mediaType === "video") {
@@ -71,5 +84,15 @@ let handleUserPublished = async (user, mediaType) => {
 let handleUserLeft = async (user) => {
   delete remoteUsers[user.uid];
   document.getElementById(`user-container-${user.uid}`).remove();
+
+  if (userIdInDisplayFrame === `user-container-${user.uid}`) {
+    displayFrame.style.display = null;
+
+    let videoFrames = document.getElementsByClassName(`video__container`);
+    for (let i = 0; videoFrames.length > i; i++) {
+      videoFrames[i].style.width = "300px";
+      videoFrames[i].style.height = "300px";
+    }
+  }
 };
 joinRoomInit();
