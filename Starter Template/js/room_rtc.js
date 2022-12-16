@@ -22,6 +22,9 @@ if (!roomId) {
 let localTracks = [];
 let remoteUsers = {};
 
+let localScreenTracks;
+let sharingScreen = false;
+
 let joinRoomInit = async () => {
   client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
   await client.join(APP_ID, roomId, token, uid);
@@ -32,15 +35,7 @@ let joinRoomInit = async () => {
 };
 
 let joinStream = async () => {
-  localTracks = await AgoraRTC.createMicrophoneAndCameraTracks(
-    {},
-    {
-      encodedConfig: {
-        width: { min: 640, ideal: 1920, max: 1920 },
-        height: { min: 480, ideal: 1080, max: 1080 },
-      },
-    }
-  );
+  localTracks = await AgoraRTC.createMicrophoneAndCameraTracks();
 
   let player = `<div class="video__container" id="user-container-${uid}">
                     <div class="video-player" id="user-${uid}"></div>
@@ -76,8 +71,9 @@ let handleUserPublished = async (user, mediaType) => {
   }
 
   if (displayFrame.style.display) {
-    player.style.height = "100px";
-    player.style.width = "100px";
+    let videoFrame = document.getElementById(`user-container-${user.uid}`);
+    videoFrame.style.height = "100px";
+    videoFrame.style.width = "100px";
   }
 
   if (mediaType === "video") {
@@ -128,6 +124,34 @@ let toggleCamera = async (e) => {
   }
 };
 
+let toggleScreen = async (e) => {
+  let screenButton = e.currentTarget;
+  let cameraButton = document.getElementById("camera-btn");
+
+  if (!sharingScreen) {
+    sharingScreen = true;
+
+    screenButton.classList.add("active");
+    cameraButton.classList.remove("active");
+    cameraButton.style.display = "none";
+
+    localScreenTracks = await AgoraRTC.createScreenVideoTrack();
+
+    document.getElementById(`user-container-${uid}`).remove();
+    displayFrame.style.display = "block";
+
+    let player = `<div class="video__container" id="user-container-${uid}">
+                  <div class="video-player" id="user-${uid}"></div>
+              </div>`;
+
+    displayFrame.insertAdjacentHTML("beforeend", player);
+  } else {
+    sharingScreen = false;
+    cameraButton.style.display = "block";
+  }
+};
+
 document.getElementById("mic-btn").addEventListener("click", toggleMic);
 document.getElementById("camera-btn").addEventListener("click", toggleCamera);
+document.getElementById("screen-btn").addEventListener("click", toggleScreen);
 joinRoomInit();
