@@ -7,7 +7,7 @@ if (!uid) {
 }
 
 let token =
-  "007eJxTYEjl1W8V/XhR/WBTi8q8/p64jLPzzVe8Kf1YJ32tmn3+2d8KDImWpolJJkYWFgYpJiYp5oYWxsnGqQYWlqmWicmJ5kkpN0r7kxsCGRmO8lSxMDJAIIjPwpCbmJnHwAAAh7Mgmg==";
+  "007eJxTYFCMbay+tzhX/onI1v3PJh6eFr3sUIeskoSbdqEDsy+jvocCQ6KlaWKSiZGFhUGKiUmKuaGFcbJxqoGFZaplYnKieVJKVs6c5IZARobgHdOYGRkgEMRnYchNzMxjYAAAs3kdUQ==";
 let client;
 
 const queryString = window.location.search;
@@ -103,4 +103,31 @@ let handleUserLeft = async (user) => {
     }
   }
 };
+
+let toggleMic = async (e) => {
+  let button = e.currentTarget;
+
+  if (localTracks[0].muted) {
+    await localTracks[0].setMuted(false);
+    button.classList.add("active");
+  } else {
+    await localTracks[0].setMuted(true);
+    button.classList.remove("active");
+  }
+};
+
+let toggleCamera = async (e) => {
+  let button = e.currentTarget;
+
+  if (localTracks[1].muted) {
+    await localTracks[1].setMuted(false);
+    button.classList.add("active");
+  } else {
+    await localTracks[1].setMuted(true);
+    button.classList.remove("active");
+  }
+};
+
+document.getElementById("mic-btn").addEventListener("click", toggleMic);
+document.getElementById("camera-btn").addEventListener("click", toggleCamera);
 joinRoomInit();
