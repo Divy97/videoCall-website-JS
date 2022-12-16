@@ -52,6 +52,21 @@ let joinStream = async () => {
   await client.publish([localTracks[0], localTracks[1]]);
 };
 
+let switchToCamera = async () => {
+  let player = `<div class="video__container" id="user-container-${uid}">
+                    <div class="video-player" id="user-${uid}"></div>
+                </div>`;
+  displayFrame.insertAdjacentHTML("beforeend", player);
+  await localTracks[0].setMuted(true);
+  await localTracks[1].setMuted(true);
+
+  document.getElementById("mic-btn").classList.remove("active");
+  document.getElementById("screen-btn").classList.remove("active");
+
+  localTracks[1].play(`user-${uid}`);
+  await client.publish([localTracks[1]]);
+};
+
 let handleUserPublished = async (user, mediaType) => {
   remoteUsers[user.uid] = user;
   await client.subscribe(user, mediaType);
@@ -154,9 +169,21 @@ let toggleScreen = async (e) => {
 
     await client.unpublish([localTracks[1]]);
     await client.publish([localScreenTracks]);
+
+    let videoFrames = document.getElementsByClassName("video__container");
+    for (let i = 0; videoFrames.length > i; i++) {
+      if (videoFrames[i].id != userIdInDisplayFrame) {
+        videoFrames[i].style.height = "100px";
+        videoFrames[i].style.width = "100px";
+      }
+    }
   } else {
     sharingScreen = false;
     cameraButton.style.display = "block";
+    document.getElementById(`user-container-${uid}`).remove();
+    await client.unpublish([localScreenTracks]);
+
+    switchToCamera();
   }
 };
 
