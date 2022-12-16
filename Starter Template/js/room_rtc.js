@@ -145,6 +145,15 @@ let toggleScreen = async (e) => {
               </div>`;
 
     displayFrame.insertAdjacentHTML("beforeend", player);
+    document
+      .getElementById(`user-container-${uid}`)
+      .addEventListener("click", expandVideoFrame);
+
+    userIdInDisplayFrame = `user-container-${uid}`;
+    localScreenTracks.play(`user-${uid}`);
+
+    await client.unpublish([localTracks[1]]);
+    await client.publish([localScreenTracks]);
   } else {
     sharingScreen = false;
     cameraButton.style.display = "block";
