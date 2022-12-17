@@ -1,4 +1,4 @@
-const APP_ID = "a95ab42880d44d7183c3e089e9aca7bd";
+const APP_ID = "64bbc7185bcf466c93c8cd1359b8bcb2";
 
 let uid = sessionStorage.getItem("uid");
 if (!uid) {
@@ -7,7 +7,7 @@ if (!uid) {
 }
 
 let token =
-  "007eJxTYFCMbay+tzhX/onI1v3PJh6eFr3sUIeskoSbdqEDsy+jvocCQ6KlaWKSiZGFhUGKiUmKuaGFcbJxqoGFZaplYnKieVJKVs6c5IZARobgHdOYGRkgEMRnYchNzMxjYAAAs3kdUQ==";
+  "007eJxTYPixy+ACa/7nN7Jux7bXznB8Z+aQJKf1yuV/9hX/b0+/rdFVYDAzSUpKNje0ME1KTjMxM0u2NE62SE4xNDa1TLJISk4y+rV+bnJDICNDMKc8MyMDBIL4LAy5iZl5DAwAAushjg==";
 let client;
 
 const queryString = window.location.search;
