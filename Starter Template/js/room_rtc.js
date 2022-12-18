@@ -7,7 +7,7 @@ if (!uid) {
 }
 
 let token =
-  "007eJxTYPixy+ACa/7nN7Jux7bXznB8Z+aQJKf1yuV/9hX/b0+/rdFVYDAzSUpKNje0ME1KTjMxM0u2NE62SE4xNDa1TLJISk4y+rV+bnJDICNDMKc8MyMDBIL4LAy5iZl5DAwAAushjg==";
+  "007eJxTYHB5NGX7oUPrv3/a7n/d6Eq9yYZ7Lgp7K/6LXO2qFw68/dJBgcHMJCkp2dzQwjQpOc3EzCzZ0jjZIjnF0NjUMskiKTnJqJNlXnJDICODbGYvCyMDBIL4LAy5iZl5DAwAVLEiAQ==";
 let client;
 
 const queryString = window.location.search;
@@ -27,7 +27,7 @@ let sharingScreen = false;
 
 let joinRoomInit = async () => {
   client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-  await client.join(APP_ID, roomId, token, uid);
+  await client.join(APP_ID, roomId, token || null, uid);
 
   client.on("user-published", handleUserPublished);
   client.on("user-left", handleUserLeft);
