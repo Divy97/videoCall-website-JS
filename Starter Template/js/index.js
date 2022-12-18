@@ -17,8 +17,8 @@ const nocache = (req, resp, next) => {
 const generateAccessToken = (req, resp) => {
   resp.header("Access-Control-Allow-Origin", "*");
 
-  const channelName = req.query.channelName;
-  if (!channelName) {
+  const room = req.query.room;
+  if (!room) {
     return resp.status(500).json({ error: "channel is required" });
   }
 
@@ -45,15 +45,15 @@ const generateAccessToken = (req, resp) => {
   const token = RtcTokenBuilder.buildTokenWithUid(
     APP_ID,
     APP_CERTIFICATE,
-    channelName,
+    room,
     uid,
     role,
     privilegeExpireTime
   );
 
-  return resp.json({ token: token });
+  return resp.json({ token: token, uid: uid });
 };
-app.get("/access_token", nocache, generateAccessToken);
+app.get("/", nocache, generateAccessToken);
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
